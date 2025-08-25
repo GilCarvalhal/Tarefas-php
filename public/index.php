@@ -24,6 +24,8 @@ if (session_status() !== PHP_SESSION_ACTIVE)
 if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(32));
 
 // Rotas
+require_once __DIR__ . '/../routes/web.php';
+
 $route = $_GET['r'] ?? 'tarefas.index';
 
 if (!isset($ROUTES[$route])) {

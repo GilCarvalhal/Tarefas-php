@@ -7,6 +7,18 @@ use PDOException;
 
 final class Database
 {
+    /**
+     * Retorna uma conexão PDO configurada com o banco de dados MySQL.
+     * 
+     * - Host: 127.0.0.1
+     * - Database: tarefas_db
+     * - Charset: utf8mb4
+     * - Usuário: root
+     * - Senha: root
+     * 
+     * @return PDO Conexão ativa com o banco de dados.
+     * @throws PDOException Em caso de falha na conexão.
+     */
     public static function getConnection(): PDO
     {
         try {

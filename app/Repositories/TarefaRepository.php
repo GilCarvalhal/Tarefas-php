@@ -7,7 +7,23 @@ use App\Entities\Tarefa;
 
 final class TarefaRepository
 {
+    /**
+     * Injeta a conexão PDO no repositório.
+     * 
+     * @param \PDO $pdo Conexão com o banco de dados.
+     */
     public function __construct(private PDO $pdo) {}
+
+    /**
+     * Lista todas as categorias cadastradas.
+     * 
+     * @return array Retorna um array associativo com id e nome das categorias.
+     */
+    public function listarCategorias(): array
+    {
+        $sql = "SELECT id, nome FROM categorias ORDER BY nome";
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     /**
      * Lista todas as tarefas com suas respectivas categorias.
