@@ -36,6 +36,7 @@ final class TarefaController
 
         if (!hash_equals($_SESSION['csrf'] ?? '', $token)) {
             http_response_code(403);
+            
             exit('CSRF Inválido!');
         }
     }
@@ -71,11 +72,19 @@ final class TarefaController
             try {
                 (new CriarTarefa($this->repo()))->executar(
                     $_POST['titulo'] ?? '',
-                    $_POST['descricao'] ?? '',
-                    $_POST['categoria_id'] !== '' ? (int)$_POST['categoria_id'] : null
+
+                     (isset($_POST['descricao']) && trim((string)$_POST['descricao']) !== '')
+                    ? trim((string)$_POST['descricao'])
+                    : null,
+
+                     (isset($_POST['categoria_id']) && $_POST['categoria_id'] !== '')
+                    ? (int)$_POST['categoria_id']
+                    : null
 
                 );
+
                 header('Location: /?r=tarefas.index');
+
                 exit;
             } catch (\InvalidArgumentException $e) {
                 $erro = $e->getMessage();
@@ -84,5 +93,63 @@ final class TarefaController
 
         $categorias = $this->repo()->listarCategorias();
         require __DIR__ . '/../Views/tarefas/criar.php';
+    }
+
+    /**
+     * Mostra o formulário de edição de uma tarefa e processa a atualização.
+     * 
+     * Serve para exibir os dados da tarefa escolhida e salvar as alterações
+     * feitas pelo usuário. Caso a tarefa não exista, retorna o erro 404.
+     * 
+     * @return void
+     */
+    public function edit(): void
+    {
+        $useCase = new EditarTarefa($this->repo());
+        $title = 'Editar Tarefa';
+        $erro = null;
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            $this->assertCsrf();
+
+            $ok = $useCase->atualizar
+            (
+                (int)($_POST['id'] ?? 0),
+
+                $_POST['titulo'] ?? '',
+
+                (isset($_POST['descricao']) && $_POST['descricao'] !== '')
+                ? (string)$_POST['descricao']
+                : null,
+
+                (isset($_POST['categoria_id']) && $_POST['categoria_id'] !== '')
+                ? (int)$_POST['categoria_id']
+                : null
+            );
+
+            if($ok)
+            {
+                header('Location: /?r=tarefas.index');
+
+                exit;
+            }
+
+            $erro = 'Título é obrigatório!';
+        }
+
+        $dados = $useCase->carregarFormulario((int)($_GET['id'] ?? 0));
+
+        if(!$dados)
+        {
+            http_response_code(404);
+
+            exit('Tarefa não encontrada!');
+        }
+
+        $tarefa = $dados['tarefa'] ?? [];
+        $categorias = $dados['categorias'] ?? [];
+
+        require __DIR__ . '/../Views/tarefas/editar.php';
     }
 }

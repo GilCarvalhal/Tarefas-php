@@ -10,7 +10,7 @@ final class TarefaRepository
     /**
      * Injeta a conexão PDO no repositório.
      * 
-     * @param \PDO $pdo Conexão com o banco de dados.
+     * @param PDO $pdo Conexão com o banco de dados.
      */
     public function __construct(private PDO $pdo) {}
 
@@ -91,7 +91,10 @@ final class TarefaRepository
     public function obter(int $id): ?Tarefa
     {
         $declaracao = $this->pdo->prepare(
-            "SELECT t.*, c.nome AS categoria_nome FROM tarefas t LEFT JOIN categorias c ON c.id = t.categoria_id WHERE t.id = :id"
+            "SELECT t.*, c.nome AS categoria_nome 
+            FROM tarefas t 
+            LEFT JOIN categorias c ON c.id = t.categoria_id 
+            WHERE t.id = :id"
         );
 
         $declaracao->execute([':id' => $id]);
@@ -106,6 +109,7 @@ final class TarefaRepository
         $tarefa->id = (int) $response['id'];
         $tarefa->titulo = $response['titulo'];
         $tarefa->descricao = $response['descricao'];
+        $tarefa->categoriaId = $response['categoria_id'];
         $tarefa->categoriaNome = $response['categoria_nome'];
         $tarefa->criadaEm = $response['criada_em'];
 
