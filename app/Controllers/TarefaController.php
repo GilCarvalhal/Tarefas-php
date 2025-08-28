@@ -152,4 +152,64 @@ final class TarefaController
 
         require __DIR__ . '/../Views/tarefas/editar.php';
     }
+
+    /**
+     * Exibe a tabela de confirmação de exclusão de uma tarefa.
+     * 
+     * - Busca a tarefa pelo ID informado via query string (?id=...).
+     * - Caso não encontre a tarefa, retorna erro 404.
+     * - Caso exista, renderiza a view de confirmação de exclusão.
+     * 
+     * @return void
+     */
+    public function confirmDelete(): void
+    {
+        $tarefa = (new EditarTarefa($this->repo()))->obter((int)($_GET['id'] ?? 0));
+
+
+        if(!$tarefa)
+        {
+            http_response_code(404);
+
+            exit('Tarefa não encontrada!');
+        }
+
+        $title = 'Confirmar exclusão';
+
+        require __DIR__ . '/../Views/tarefas/deletar.php';
+    }
+
+    /**
+     * Processa a exclusão de uma tarefa.
+     * 
+     * - Aceita apenas requisições POST.
+     * - Valida o token CSRF antes de executar a operação.
+     * - Converte o ID da tarefa recebido no formulário em inteiro.
+     * - Chama o caso de uso DeletarTarefa para efetivar a exclusão.
+     * - Redireciona o usuário de volta à listagem de tarefas.
+     * 
+     * @return never Encerra a execução após o redirecionamento.
+     */
+    public function delete(): void
+    {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST')
+        {
+            http_response_code(405);
+
+            exit('Método não permitido!');
+        }
+
+        $this->assertCsrf();
+
+        $id = (int) ($_POST['id'] ?? 0);
+
+        if($id)
+        {
+            (new DeletarTarefa($this->repo()))->executar($id);
+        }
+
+        header('Location: /?r=tarefas.index');
+
+        exit;
+    }
 }
