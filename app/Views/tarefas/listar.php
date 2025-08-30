@@ -1,11 +1,11 @@
 <?php require __DIR__ . '/../layout/header.php'; ?>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h4 mb-0">Tarefas</h1>
+<div class="d-flex justify-content-between align-items-center mb-3 mt-1 me-1">
+  <h1 class="h4 mb-0 ms-1">Tarefas</h1>
   <a href="/?r=tarefas.create" class="btn btn-success">+ Nova Tarefa</a>
 </div>
 
-<table class="table table-striped align-middle">
+<table class="table table-striped align-middle ms-1 me-1">
   <thead>
     <tr>
       <th>#</th><th>Título</th><th>Categoria</th><th>Criada em</th><th class="text-end">Ações</th>
@@ -24,6 +24,7 @@
         <td><?= htmlspecialchars($t->categoriaNome ?? '—') ?></td>
         <td><?= htmlspecialchars($t->criadaEm ?? '') ?></td>
         <td class="text-end">
+          <a href="/?r=tarefas.show&id=<?= (int)$t->id?>" class="btn btn-sm btn-outline-secondary">Mostrar</a>
           <a class="btn btn-sm btn-primary" href="/?r=tarefas.edit&id=<?= (int)$t->id ?>">Editar</a>
           <a class="btn btn-sm btn-danger"  href="/?r=tarefas.confirmDelete&id=<?= (int)$t->id ?>">Excluir</a>
         </td>

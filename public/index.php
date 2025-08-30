@@ -12,6 +12,7 @@ require_once __DIR__ . '/../app/UseCase/CriarTarefa.php';
 require_once __DIR__ .  '/../app/UseCase/EditarTarefa.php';
 require_once __DIR__ . '/../app/UseCase/DeletarTarefa.php';
 require_once __DIR__ . '/../app/UseCase/ListarTarefa.php';
+require_once __DIR__ . '/../app/UseCase/MostrarTarefa.php';
 
 // Controllers
 require_once __DIR__ . '/../app/Controllers/TarefaController.php';

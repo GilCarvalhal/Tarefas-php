@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Repositories\TarefaRepository;
-use App\UseCase\{CriarTarefa, ListarTarefa, EditarTarefa, DeletarTarefa};
+use App\UseCase\{CriarTarefa, ListarTarefa, EditarTarefa, DeletarTarefa, MostrarTarefa};
 
 final class TarefaController
 {
@@ -211,5 +211,33 @@ final class TarefaController
         header('Location: /?r=tarefas.index');
 
         exit;
+    }
+
+    /**
+     * Exibe os detalhes de uma tarefa (somente leitura).
+     * 
+     * - Obtém o parâmetro 'id' via query string.
+     * - Usa o caso de uso 'MostrarTarefa' para buscar os dados.
+     * - Responde 404 se a tarefa não existir.
+     * - Define '$title' e renderiza a view 'tarefas/mostrar.php'.
+     * 
+     * @return void
+     */
+    public function show()
+    {
+        $useCase = new MostrarTarefa($this->repo());
+
+        $tarefa = $useCase->executar((int)($_GET['id'] ?? 0));
+
+        if($tarefa === null)
+        {
+            http_response_code(404);
+
+            exit('Tarefa não encontrada!');
+        }
+
+        $title = 'Detalhes da Tarefa';
+
+        require __DIR__ . '/../Views/tarefas/mostrar.php';
     }
 }

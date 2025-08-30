@@ -10,5 +10,6 @@ $ROUTES =
         'tarefas.create' => [$controller, 'create'],
         'tarefas.edit' => [$controller, 'edit'],
         'tarefas.confirmDelete' => [$controller, 'confirmDelete'],
-        'tarefas.delete' => [$controller, 'delete']
+        'tarefas.delete' => [$controller, 'delete'],
+        'tarefas.show' => [$controller, 'show']
     ];

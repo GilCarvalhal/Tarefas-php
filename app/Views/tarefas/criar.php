@@ -1,12 +1,12 @@
 <?php require __DIR__ . '/../layout/header.php'; ?>
 
-<h1 class="h4 mb-3">Nova tarefa</h1>
+<h1 class="h4 mb-3 ms-1">Nova tarefa</h1>
 
 <?php if (!empty($erro)): ?>
   <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
 <?php endif; ?>
 
-<form method="post" class="vstack gap-3" action="/?r=tarefas.create">
+<form method="post" class="vstack gap-3 ms-1 me-1" action="/?r=tarefas.create">
   <!-- CSRF -->
   <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '') ?>">
 

@@ -1,6 +1,6 @@
 <?php require __DIR__ . '/../layout/header.php'; ?>
 
-<h1 class="h4 mb-3"><?= htmlspecialchars($title ?? 'Editar Tarefa') ?></h1>
+<h1 class="h4 mb-3 ms-1"><?= htmlspecialchars($title ?? 'Editar Tarefa') ?></h1>
 
 <?php if (!empty($erro)): ?>
   <div class="alert alert-danger" role="alert" aria-live="assertive" id="form-error">
@@ -8,7 +8,7 @@
   </div>
 <?php endif; ?>
 
-<form method="post" class="vstack gap-3" action="/?r=tarefas.edit" novalidate>
+<form method="post" class="vstack gap-3 ms-1 me-1" action="/?r=tarefas.edit" novalidate>
   <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '') ?>">
   <input type="hidden" name="id" value="<?= (int)($tarefa['id'] ?? 0) ?>">
 
